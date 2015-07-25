@@ -71,12 +71,9 @@
 #define HTTP3					353
 #define IMEI					389
 #define GPRS_APN				405
-#define GPRS_USER				441
-#define GPRS_PASS				466
-#define GPRS_HOST				491
-#define GPRS_PORT				527
-#define UDP_HEADER				529
-#define UDP_REPLY				545
+#define GPRS_HOST				441
+#define GPRS_PORT				477
+#define UDP_HEADER				479
 
 
 /**********************************/

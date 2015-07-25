@@ -5,7 +5,8 @@ void setEeprom()
 	ptr = strtok_r(smsData.smsCmdString,".",&str);
 	uint16_t eepAdd = atoi(ptr);
 	switch(eepAdd)
-	{//uint8_t
+	{
+	/**** uint8_t  ****/
 		case IOSTATE0:
 			{
 				ptr = strtok_r(NULL,".",&str);
@@ -66,10 +67,9 @@ void setEeprom()
 		case IOSTATE5:
 			analogReadPin = 6;
 			break;
-		//uint8_t
+	/**** uint8_t  ****/
 		case IOSINGLEPULSETIME: case IODOUBLEPULSETIME1: case IODOUBLEPULSETIME2: case IODOUBLEPULSETIME3: 
-		case RETURNADDCONFIG: case BATTERYLOWLEVEL:  
-		case BMA0X0F: case BMA0X10: case BMA0X11: 
+		case RETURNADDCONFIG: case BATTERYLOWLEVEL: case BMA0X0F: case BMA0X10: case BMA0X11:  
 		case BMA0X16: case BMA0X17: case BMA0X19: case BMA0X1A: case BMA0X1B: case BMA0X20: case BMA0X21: 
 		case BMA0X25: case BMA0X26: case BMA0X27: case BMA0X28: case ENGMETRIC: case SLEEPTIMECONFIG:
 		case BREACHSPEED: case BREACHREPS: case SPEEDHYST: case UDPPOWERPROFILE: case SMSPOWERPROFILE:
@@ -82,24 +82,23 @@ void setEeprom()
 				BMA250configureInterrupts();
 			}
 			break;
-	//int8_t
+	/**** int_8  ****/
 		case TIMEZONE:
 			ptr = strtok_r(NULL,".",&str);
 			EEPROM.write(eepAdd,(int8_t)atoi(ptr));
 			break;
-	//uint16_t
+	/**** uint16_t  ****/
 		case SPEEDLIMIT: case GPRS_PORT:
 			ptr = strtok_r(NULL,".",&str);
 			EEPROM_writeAnything(eepAdd,(uint16_t)(atoi(ptr)));
 			break;
-	//unsigned long 
-		case SLEEPTIMEON:
-		case SLEEPTIMEOFF: case SMSSENDINTERVALBAT: case SMSSENDINTERVALPLUG: 
+	/**** unsigned long  ****/ 
+		case SLEEPTIMEON: case SLEEPTIMEOFF: case SMSSENDINTERVALBAT: case SMSSENDINTERVALPLUG: 
 		case UDPSENDINTERVALBAT: case UDPSENDINTERVALPLUG:
 			ptr = strtok_r(NULL,".",&str);
 			EEPROM_writeAnything(eepAdd,(unsigned long)(atol(ptr)));
 			break;
-	// long
+	/**** long  ****/
 		case RADIUS1: case RADIUS2: case RADIUS3:
 			{
 				ptr = strtok_r(NULL,".",&str);
@@ -119,26 +118,24 @@ void setEeprom()
 					EEPROM_writeAnything(eepAdd,(long)(atol(ptr)));
 			}
 			break;
-			// long
+	/**** long  ****/
 		case LATITUDE1: case LATITUDE2: case LATITUDE3: case LONGITUDE1: case LONGITUDE2: case LONGITUDE3:
 			ptr = strtok_r(NULL,".",&str);
 			EEPROM_writeAnything(eepAdd,(long)(atol(ptr)));
 			break;
-	//string length 4 characters...not including terminating null
+	/**** string length 4 characters...not including terminating null ****/
 		case PINCODE:
 			ptr = strtok_r(NULL,".",&str);
 			writeEEPROM(ptr,eepAdd,4);
 			break;
-	//string length 35 characters...not including terminating null
-		case HTTP1: case HTTP2: case HTTP3: case GPRS_APN: case GPRS_USER: case GPRS_PASS: case GPRS_HOST:
+	/**** string length 35 characters...not including terminating null ****/
+		case HTTP1: case HTTP2: case HTTP3: case GPRS_APN: case GPRS_HOST:
 			ptr = strtok_r(NULL,"$",&str); 
 			writeEEPROM(ptr,eepAdd,35);
 			break;
-	//string length 15 characters...not including terminating null
-		case IMEI: case SMSADDRESS:
-		case MOTIONMSG: case BATTERYMSG: case FENCE1MSG: case FENCE2MSG: case FENCE3MSG: case SPEEDMSG: case MAXSPEEDMSG: case GEOGRAMONEID:
-		case D4MSG: case D10MSG:
-		case UDP_HEADER: case UDP_REPLY: 
+	/**** string length 15 characters...not including terminating null ****/
+		case IMEI: case SMSADDRESS: case MOTIONMSG: case BATTERYMSG: case FENCE1MSG: case FENCE2MSG: case FENCE3MSG:
+		case SPEEDMSG: case MAXSPEEDMSG: case GEOGRAMONEID: case D4MSG: case D10MSG: case UDP_HEADER:
 			ptr = strtok_r(NULL,":",&str);
 			writeEEPROM(ptr,eepAdd,15);
 			break;
@@ -168,10 +165,9 @@ void getEeprom()
 		{
 			//uint8_t
 			case IOSINGLEPULSETIME: case IODOUBLEPULSETIME1: case IODOUBLEPULSETIME2: case IODOUBLEPULSETIME3: 
-			case RETURNADDCONFIG: case BATTERYLOWLEVEL:
-			case BMA0X0F: case BMA0X10: case BMA0X11: 
-			case BMA0X16: case BMA0X17: case BMA0X19: case BMA0X1A: case BMA0X1B: case BMA0X20: case BMA0X21: 
-			case BMA0X25: case BMA0X26: case BMA0X27: case BMA0X28: case ENGMETRIC: case SLEEPTIMECONFIG:
+			case RETURNADDCONFIG: case BATTERYLOWLEVEL: case BMA0X0F: case BMA0X10: case BMA0X11: case BMA0X16: 
+			case BMA0X17: case BMA0X19: case BMA0X1A: case BMA0X1B: case BMA0X20: case BMA0X21: case BMA0X25:
+			case BMA0X26: case BMA0X27: case BMA0X28: case ENGMETRIC: case SLEEPTIMECONFIG:
 			case BREACHSPEED: case BREACHREPS: case SPEEDHYST: case UDPPOWERPROFILE: case SMSPOWERPROFILE:
 			case UDPSPEEDBAT: case UDPSPEEDPLUG: case SMSSPEEDBAT: case SMSSPEEDPLUG:
 			case IOSTATE0: case IOSTATE1: case IOSTATE2: case IOSTATE3: case IOSTATE4: case IOSTATE5:
@@ -190,8 +186,7 @@ void getEeprom()
 				}
 				break;
 			//unsigned long 
-			case SLEEPTIMEON:
-			case SLEEPTIMEOFF: case SMSSENDINTERVALBAT: case SMSSENDINTERVALPLUG: 
+			case SLEEPTIMEON: case SLEEPTIMEOFF: case SMSSENDINTERVALBAT: case SMSSENDINTERVALPLUG: 
 			case UDPSENDINTERVALBAT: case UDPSENDINTERVALPLUG:
 				{
 					unsigned long nonByte;
@@ -209,19 +204,10 @@ void getEeprom()
 					GSM.println(nonByte,DEC);
 				}
 				break;
-			//string length 4 characters...not including terminating null
 			case PINCODE:
-			//string length 38 characters...not including terminating null
-			case SMSADDRESS:
-			//string length 24 characters...not including terminating null
-			case MOTIONMSG: case BATTERYMSG: case FENCE1MSG: case FENCE2MSG: case FENCE3MSG: case SPEEDMSG: case MAXSPEEDMSG: case GEOGRAMONEID:
-			case D4MSG: case D10MSG: case GPRS_USER: case GPRS_PASS:
-			//string length 49 characters...not including terminating null
-			case HTTP1: case HTTP2: case HTTP3: case GPRS_APN:
-			//string length 15 characters...not including terminating null
-			case IMEI: case GPRS_HOST:
-			//string length 10 characters...not including terminating null
-			case UDP_HEADER: case UDP_REPLY:
+			case SMSADDRESS: case MOTIONMSG: case BATTERYMSG: case FENCE1MSG: case FENCE2MSG: case FENCE3MSG: 
+			case SPEEDMSG: case MAXSPEEDMSG: case GEOGRAMONEID: case D4MSG: case D10MSG: case HTTP1: 
+			case HTTP2: case HTTP3: case GPRS_APN: case IMEI: case GPRS_HOST: case UDP_HEADER:
 				printEEPROM(eepAdd);
 				break;
 			default:

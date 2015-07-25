@@ -74,12 +74,9 @@
 #define HTTP3					353
 #define IMEI					389
 #define GPRS_APN				405
-#define GPRS_USER				441
-#define GPRS_PASS				466
-#define GPRS_HOST				491
-#define GPRS_PORT				527
-#define UDP_HEADER				529
-#define UDP_REPLY				545
+#define GPRS_HOST				441
+#define GPRS_PORT				477
+#define UDP_HEADER				479
 
 #define SPACE					"        "
 #define SPACE2					"        "
@@ -96,33 +93,30 @@ void setup()
 
 void loop()
 {
-	char pincode[5] = "0000"; //pincode must be 4 digits
-	char smsaddress[39] = ""; //smsaddress must be 38 characters or less
-	char batteryMsg[25] = "Low Battery";
-	char motionMsg[25] = "Motion Detected";
-	char fence1Msg[25] = "Fence 1 Breach";
-	char fence2Msg[25] = "Fence 2 Breach";
-	char fence3Msg[25] = "Fence 3 Breach";
-	char speedMsg[25] = "Speed Exceeded";
-	char geoIDMsg[25] = "GO FW_3.0b";
-	char maxSpeedMsg[25] = "Max Speed = ";
-	char http1[100] = "http://maps.google.com/maps?q=";
-	char http2[100] = " ("; // originally was "+(" . Replaced + with space because of new google maps app
-	char http3[100] = ")&z=19";
-	char d4msg[25] = "D4 Switch Alert";
-	char d10msg[25] = "D10 Switch Alert";
-	char imei[16] = " "; //15 digit number on GSM chip
-	char gprsApn[50] = "wholesale"; //SIM card specific APN.  wholesale is used on Platinumtel
-	char gprsUser[25] = "";
-	char gprsPass[25] = "";
-	char gprsHost[16] = "193.193.165.166"; //Server address for GPS-Trace Orange
-	char gprsHeader[11] = "#SD#";
-	char gprsReply[11] = "#ASD#1";
+	char pincode[5] = "0000"; //pincode must be 4 digits   /**** DEFAULT VALUE STORED IN EEPROM ****/
+	char smsaddress[16] = ""; //smsaddress must be 38 characters or less   /**** DEFAULT VALUE STORED IN EEPROM ****/
+	char batteryMsg[16] = "Low Battery"; /**** DEFAULT VALUE STORED IN EEPROM ****/
+	char motionMsg[16] = "Motion Detected"; /**** DEFAULT VALUE STORED IN EEPROM ****/
+	char fence1Msg[16] = "Fence 1 Breach"; /**** DEFAULT VALUE STORED IN EEPROM ****/
+	char fence2Msg[16] = "Fence 2 Breach"; /**** DEFAULT VALUE STORED IN EEPROM ****/
+	char fence3Msg[16] = "Fence 3 Breach"; /**** DEFAULT VALUE STORED IN EEPROM ****/
+	char speedMsg[16] = "Speed Exceeded"; /**** DEFAULT VALUE STORED IN EEPROM ****/
+	char geoIDMsg[16] = "GO FW_3.0b"; /**** DEFAULT VALUE STORED IN EEPROM ****/
+	char maxSpeedMsg[16] = "Max Speed = "; /**** DEFAULT VALUE STORED IN EEPROM ****/
+	char http1[36] = "http://maps.google.com/maps?q="; /**** DEFAULT VALUE STORED IN EEPROM ****/
+	char http2[36] = " ("; // originally was "+(" . Replaced + with space because of new google maps app  /**** DEFAULT VALUE STORED IN EEPROM ****/
+	char http3[36] = ")&z=19"; /**** DEFAULT VALUE STORED IN EEPROM ****/
+	char d4msg[16] = "Pin D4 Alert"; /**** DEFAULT VALUE STORED IN EEPROM ****/
+	char d10msg[16] = "Pin D10 Alert"; /**** DEFAULT VALUE STORED IN EEPROM ****/
+	char imei[16] = " "; //15 digit number on GSM chip /**** DEFAULT VALUE STORED IN EEPROM ****/
+	char gprsApn[36] = "wholesale"; //SIM card specific APN.  wholesale is used on Platinumtel /**** DEFAULT VALUE STORED IN EEPROM ****/
+	char gprsHost[36] = "193.193.165.166"; //Server address for GPS-Trace Orange /**** DEFAULT VALUE STORED IN EEPROM ****/
+	char gprsHeader[16] = "#SD#"; /**** DEFAULT VALUE STORED IN EEPROM ****/
 
 	char textIn = NULL;
 	bool w = false;
 
-    Serial.println("PRESS P TO PROGRAM EEPROM OR R TO READ EEPROM");
+    Serial.println("PRESS P - PROGRAM EEPROM, R - READ EEPROM, C - CLEAR EEPROM");
     while(1)
 	{
 		if(Serial.available())
@@ -140,10 +134,25 @@ void loop()
 				Serial.println("Reg#    Default       Current");
 				break;
 			}
+			if((textIn == 'c') || (textIn == 'C'))
+			{
+				for(uint16_t eepromAddress = 0;eepromAddress <= 1023;eepromAddress++)
+				{
+					EEPROM.write(eepromAddress,0xFF);
+				}
+				Serial.println("EEPROM HAS BEEN CLEARED OF ALL CONTENTS");
+				return;
+			}
 		}
 	}
 	Serial.flush();
 	Serial.println("-------------------------------------");
+	
+	uint8_t abyte;
+	int8_t sbyte;
+	uint16_t ninteger;
+	unsigned long ulong;
+	int32_t slong;
 	
 	Serial.print(PINCODE);Serial.print(SPACE);
 	if(w)EEPROM_writeAnything(PINCODE,pincode);
@@ -156,327 +165,325 @@ void loop()
 	EEPROM_readAnything(SMSADDRESS,smsaddress);Serial.println(smsaddress);
 	
 	Serial.print(RETURNADDCONFIG);Serial.print(SPACE);	
-	uint8_t abyte = 0;
+	abyte = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(RETURNADDCONFIG,(uint8_t)abyte); //changed to a 1 from 0
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(RETURNADDCONFIG,abyte);Serial.println(abyte,DEC);
 
 	Serial.print(TIMEZONE);Serial.print(SPACE);
-	int8_t sbyte = -4;
+	sbyte = -4; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(TIMEZONE,(int8_t)sbyte);   //use -4 for EST
 	Serial.print(sbyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(TIMEZONE,sbyte);Serial.println(sbyte,DEC);
 	
 	Serial.print(ENGMETRIC);Serial.print(SPACE);
-	abyte = 0;
+	abyte = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(ENGMETRIC,(uint8_t)abyte);  // 0 - English (mph, ft, etc...), 1 = Metric (kph, m, etc...)
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(ENGMETRIC,abyte);Serial.println(abyte,DEC);
 
-	unsigned int ninteger = 3;
 	Serial.print(BATTERYLOWLEVEL);Serial.print(SPACE);
-	abyte = 32;
+	abyte = 32; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(BATTERYLOWLEVEL,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(BATTERYLOWLEVEL,abyte);Serial.println(abyte,DEC);
 	
-	unsigned long ulong = 500;
 	Serial.print(IOSTATE0);Serial.print(SPACE);
-	abyte = 2;
+	abyte = 2; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(IOSTATE0,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(IOSTATE0,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(IOSTATE1);Serial.print(SPACE);
-	abyte = 4;
+	abyte = 4; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(IOSTATE1,(uint8_t)abyte); //int falling
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(IOSTATE1,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(IOSTATE2);Serial.print(SPACE);
-	abyte = 2;
+	abyte = 2; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(IOSTATE2,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(IOSTATE2,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(IOSTATE3);Serial.print(SPACE);
-	abyte = 2;
+	abyte = 2; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(IOSTATE3,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(IOSTATE3,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(IOSTATE4);Serial.print(SPACE);
-	abyte = 2;
+	abyte = 2; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(IOSTATE4,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(IOSTATE4,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(IOSTATE5);Serial.print(SPACE);
-	abyte = 3;
+	abyte = 3; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(IOSTATE5,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(IOSTATE5,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(IOSINGLEPULSETIME);Serial.print(SPACE);
-	abyte = 255;
+	abyte = 255; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(IOSINGLEPULSETIME,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(IOSINGLEPULSETIME,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(IODOUBLEPULSETIME1);Serial.print(SPACE);
-	abyte = 255;
+	abyte = 255; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(IODOUBLEPULSETIME1,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(IODOUBLEPULSETIME1,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(IODOUBLEPULSETIME2);Serial.print(SPACE);
-	abyte = 255;
+	abyte = 255; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(IODOUBLEPULSETIME2,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(IODOUBLEPULSETIME2,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(IODOUBLEPULSETIME3);Serial.print(SPACE);
-	abyte = 255;
+	abyte = 255; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(IODOUBLEPULSETIME3,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(IODOUBLEPULSETIME3,abyte);Serial.println(abyte,DEC);
 
 	Serial.print(SLEEPTIMECONFIG);Serial.print(SPACE);
-	abyte = 3;
+	abyte = 3; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(SLEEPTIMECONFIG,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(SLEEPTIMECONFIG,abyte);Serial.println(abyte,DEC);
 
 	Serial.print(SLEEPTIMEON);Serial.print(SPACE);
-	ulong = 0;
+	ulong = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(SLEEPTIMEON,(unsigned long)ulong);
 	Serial.print(ulong,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(SLEEPTIMEON,ulong);Serial.println(ulong,DEC);
 	
 	Serial.print(SLEEPTIMEOFF);Serial.print(SPACE);
-	ulong = 0;
+	ulong = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(SLEEPTIMEOFF,(unsigned long)ulong);
 	Serial.print(ulong,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(SLEEPTIMEOFF,ulong);Serial.println(ulong,DEC);
 	
 	Serial.print(SPEEDLIMIT);Serial.print(SPACE);
-	ninteger = 0;
+	ninteger = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(SPEEDLIMIT,(uint16_t)ninteger);
 	Serial.print(ninteger,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(SPEEDLIMIT,ninteger);Serial.println(ninteger,DEC);
 	
 	Serial.print(SPEEDHYST);Serial.print(SPACE);
-	abyte = 3;
+	abyte = 3; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(SPEEDHYST,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(SPEEDHYST,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(RADIUS1);Serial.print(SPACE);
-	int32_t slong = 0;
+	slong = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(RADIUS1,(unsigned long)slong);
 	Serial.print(slong,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(RADIUS1,slong);Serial.println(slong,DEC);
 
 	Serial.print(LATITUDE1);Serial.print(SPACE);
-	slong = 0;
+	slong = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(LATITUDE1,(long)slong);
 	Serial.print(slong,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(LATITUDE1,slong);Serial.println(slong,DEC);
 
 	Serial.print(LONGITUDE1);Serial.print(SPACE);
-	slong = 0;
+	slong = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(LONGITUDE1,(long)slong);
 	Serial.print(slong,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(LONGITUDE1,slong);Serial.println(slong,DEC);
 
 	Serial.print(RADIUS2);Serial.print(SPACE);
-	slong = 0;
+	slong = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(RADIUS2,(unsigned long)slong);
 	Serial.print(slong,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(RADIUS2,slong);Serial.println(slong,DEC);
 
 	Serial.print(LATITUDE2);Serial.print(SPACE);
-	slong = 0;
+	slong = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(LATITUDE2,(long)slong);
 	Serial.print(slong,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(LATITUDE2,slong);Serial.println(slong,DEC);
 
 	Serial.print(LONGITUDE2);Serial.print(SPACE);
-	slong = 0;
+	slong = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(LONGITUDE2,(long)slong);
 	Serial.print(slong,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(LONGITUDE2,slong);Serial.println(slong,DEC);
 	
 	Serial.print(RADIUS3);Serial.print(SPACE);
-	slong = 0;
+	slong = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(RADIUS3,(unsigned long)slong);
 	Serial.print(slong,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(RADIUS3,slong);Serial.println(slong,DEC);
 	
 	Serial.print(LATITUDE3);Serial.print(SPACE);
-	slong = 0;
+	slong = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(LATITUDE3,(long)slong);
 	Serial.print(slong,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(LATITUDE3,slong);Serial.println(slong,DEC);
 	
 	Serial.print(LONGITUDE3);Serial.print(SPACE);
-	slong = 0;
+	slong = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(LONGITUDE3,(long)slong);
 	Serial.print(slong,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(LONGITUDE3,slong);Serial.println(slong,DEC);
 	
 	Serial.print(BREACHSPEED);Serial.print(SPACE);
-	abyte = 2;
+	abyte = 2; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(BREACHSPEED,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(BREACHSPEED,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(BREACHREPS);Serial.print(SPACE);
-	abyte = 0x0A;
+	abyte = 0x0A; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(BREACHREPS,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(BREACHREPS,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(BMA0X0F);Serial.print(SPACE);
-	abyte = 5;
+	abyte = 5; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(BMA0X0F,(uint8_t)abyte); //was 3
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(BMA0X0F,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(BMA0X10);Serial.print(SPACE);
-	abyte = 8;
+	abyte = 8; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(BMA0X10,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(BMA0X10,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(BMA0X11);Serial.print(SPACE);
-	abyte = 0;
+	abyte = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(BMA0X11,(uint8_t)abyte); //default 0x00 per datasheet
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(BMA0X11,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(BMA0X16);Serial.print(SPACE);
-	abyte = 7;
+	abyte = 7; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(BMA0X16,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(BMA0X16,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(BMA0X17);Serial.print(SPACE);
-	abyte = 0;
+	abyte = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(BMA0X17,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(BMA0X17,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(BMA0X19);Serial.print(SPACE);
-	abyte = 4;
+	abyte = 4; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(BMA0X19,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(BMA0X19,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(BMA0X1A);Serial.print(SPACE);
-	abyte = 0;
+	abyte = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(BMA0X1A,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(BMA0X1A,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(BMA0X1B);Serial.print(SPACE);
-	abyte = 0;
+	abyte = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(BMA0X1B,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(BMA0X1B,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(BMA0X20);Serial.print(SPACE);
-	abyte = 6;
+	abyte = 6; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(BMA0X20,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(BMA0X20,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(BMA0X21);Serial.print(SPACE);
-	abyte = 0x8E;
+	abyte = 0x8E; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(BMA0X21,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(BMA0X21,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(BMA0X25);Serial.print(SPACE);
-	abyte = 0x0F;
+	abyte = 0x0F; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(BMA0X25,(uint8_t)abyte); //default 0x0F per datasheet
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(BMA0X25,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(BMA0X26);Serial.print(SPACE);
-	abyte = 0xC0;
+	abyte = 0xC0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(BMA0X26,(uint8_t)abyte); //default 0xC0 per datasheet
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(BMA0X26,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(BMA0X27);Serial.print(SPACE);
-	abyte = 5;  // original was 0
+	abyte = 5; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(BMA0X27,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(BMA0X27,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(BMA0X28);Serial.print(SPACE);
-	abyte = 4;
+	abyte = 4; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(BMA0X28,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(BMA0X28,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(UDPSENDINTERVALBAT);Serial.print(SPACE);
-    ulong = 0;
+    ulong = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(UDPSENDINTERVALBAT,(unsigned long)ulong);
 	Serial.print(ulong,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(UDPSENDINTERVALBAT,ulong);Serial.println(ulong,DEC);
 	
 	Serial.print(UDPSENDINTERVALPLUG);Serial.print(SPACE);
-	ulong = 0;
+	ulong = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(UDPSENDINTERVALPLUG,(unsigned long)ulong);
 	Serial.print(ulong,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(UDPSENDINTERVALPLUG,ulong);Serial.println(ulong,DEC);
 	
 	Serial.print(UDPPOWERPROFILE);Serial.print(SPACE);
-	abyte = 0;
+	abyte = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(UDPPOWERPROFILE,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(UDPPOWERPROFILE,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(UDPSPEEDBAT);Serial.print(SPACE);
-	abyte = 0;
+	abyte = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(UDPSPEEDBAT,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(UDPSPEEDBAT,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(UDPSPEEDPLUG);Serial.print(SPACE);
-	abyte = 0;
+	abyte = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(UDPSPEEDPLUG,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(UDPSPEEDPLUG,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(SMSSENDINTERVALBAT);Serial.print(SPACE);
-	ulong = 0;
+	ulong = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(SMSSENDINTERVALBAT,(unsigned long)ulong);
 	Serial.print(ulong,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(SMSSENDINTERVALBAT,ulong);Serial.println(ulong,DEC);
 	
 	Serial.print(SMSSENDINTERVALPLUG);Serial.print(SPACE);
-	ulong = 0;
+	ulong = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(SMSSENDINTERVALPLUG,(unsigned long)ulong);
 	Serial.print(ulong,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(SMSSENDINTERVALPLUG,ulong);Serial.println(ulong,DEC);
 	
 	Serial.print(SMSPOWERPROFILE);Serial.print(SPACE);
-	abyte = 0;
+	abyte = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(SMSPOWERPROFILE,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(SMSPOWERPROFILE,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(SMSSPEEDBAT);Serial.print(SPACE);
-	abyte = 0;
+	abyte = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(SMSSPEEDBAT,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(SMSSPEEDBAT,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(SMSSPEEDPLUG);Serial.print(SPACE);
-	abyte = 0;
+	abyte = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(SMSSPEEDPLUG,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(SMSSPEEDPLUG,abyte);Serial.println(abyte,DEC);
@@ -556,23 +563,13 @@ void loop()
 	Serial.print(gprsApn);Serial.print(SPACE2);
 	EEPROM_readAnything(GPRS_APN,gprsApn);Serial.println(gprsApn);
 
-	Serial.print(GPRS_USER);Serial.print(SPACE);
- 	if(w)EEPROM_writeAnything(GPRS_USER,gprsUser);
-	Serial.print(gprsUser);Serial.print(SPACE2);
-	EEPROM_readAnything(GPRS_USER,gprsUser);Serial.println(gprsUser);
-
-	Serial.print(GPRS_PASS);Serial.print(SPACE);
- 	if(w)EEPROM_writeAnything(GPRS_PASS,gprsPass);
-	Serial.print(gprsPass);Serial.print(SPACE2);
-	EEPROM_readAnything(GPRS_PASS,gprsPass);Serial.println(gprsPass);
-
 	Serial.print(GPRS_HOST);Serial.print(SPACE);
  	if(w)EEPROM_writeAnything(GPRS_HOST,gprsHost);
 	Serial.print(gprsHost);Serial.print(SPACE2);
 	EEPROM_readAnything(GPRS_HOST,gprsHost);Serial.println(gprsHost);
 
 	Serial.print(GPRS_PORT);Serial.print(SPACE);
-	ninteger = 20332;
+	ninteger = 20332; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(GPRS_PORT,(uint16_t)ninteger); //GPRS port number
 	Serial.print(ninteger,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(GPRS_PORT,ninteger);Serial.println(ninteger,DEC);
@@ -581,12 +578,6 @@ void loop()
  	if(w)EEPROM_writeAnything(UDP_HEADER,gprsHeader);
 	Serial.print(gprsHeader);Serial.print(SPACE2);
 	EEPROM_readAnything(UDP_HEADER,gprsHeader);Serial.println(gprsHeader);
-
-	Serial.print(UDP_REPLY);Serial.print(SPACE);
- 	if(w)EEPROM_writeAnything(UDP_REPLY,gprsReply);
-	Serial.print(gprsReply);Serial.print(SPACE2);
-	EEPROM_readAnything(UDP_REPLY,gprsReply);Serial.println(gprsReply);
-	Serial.println();	
 
 	Serial.print("Finished ");
 	if(w)Serial.print("Writing ");
