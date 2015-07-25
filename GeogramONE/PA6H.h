@@ -1,4 +1,3 @@
-#include <Time.h>
 
 #ifndef PA6H_h
 #define PA6H_h
@@ -36,17 +35,6 @@
 #define OCTOBER				10
 #define NOVEMBER			11
 #define DECEMBER			12
-/*			
-struct gpsTime
-{
-	int8_t hour;
-	int8_t minute;
-	int8_t second;
-	int8_t day;
-	int8_t month;
-	int8_t year;
-};*/
-			
 			
 struct goCoord
 {
@@ -60,7 +48,6 @@ struct goCoord
 	int8_t day;
 	int8_t month;
 	int8_t year;
-//	gpsTime pos;
 	uint8_t positionFixInd;
 	uint8_t mode2;
 	uint16_t pdop;
