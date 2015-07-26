@@ -109,9 +109,9 @@ void loop()
 	char d4msg[16] = "Pin D4 Alert"; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	char d10msg[16] = "Pin D10 Alert"; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	char imei[16] = "*"; //15 digit number on GSM chip /**** DEFAULT VALUE STORED IN EEPROM ****/
-	char gprsApn[36] = "wholesale"; //SIM card specific APN.  wholesale is used on Platinumtel /**** DEFAULT VALUE STORED IN EEPROM ****/
-	char gprsHost[36] = "193.193.165.166"; //Server address for GPS-Trace Orange /**** DEFAULT VALUE STORED IN EEPROM ****/
-	char gprsHeader[16] = "#SD#"; /**** DEFAULT VALUE STORED IN EEPROM ****/
+	char udpApn[36] = "wholesale"; //SIM card specific APN.  wholesale is used on Platinumtel /**** DEFAULT VALUE STORED IN EEPROM ****/
+	char udpHost[36] = "193.193.165.166"; //Server address for GPS-Trace Orange /**** DEFAULT VALUE STORED IN EEPROM ****/
+	char udpHeader[16] = "#SD#"; /**** DEFAULT VALUE STORED IN EEPROM ****/
 
 	char textIn = NULL;
 	bool w = false;
@@ -559,14 +559,14 @@ void loop()
 	EEPROM_readAnything(IMEI,imei);Serial.println(imei);
 
 	Serial.print(GPRS_APN);Serial.print(SPACE);
- 	if(w)EEPROM_writeAnything(GPRS_APN,gprsApn);
-	Serial.print(gprsApn);Serial.print(SPACE2);
-	EEPROM_readAnything(GPRS_APN,gprsApn);Serial.println(gprsApn);
+ 	if(w)EEPROM_writeAnything(GPRS_APN,udpApn);
+	Serial.print(udpApn);Serial.print(SPACE2);
+	EEPROM_readAnything(GPRS_APN,udpApn);Serial.println(udpApn);
 
 	Serial.print(GPRS_HOST);Serial.print(SPACE);
- 	if(w)EEPROM_writeAnything(GPRS_HOST,gprsHost);
-	Serial.print(gprsHost);Serial.print(SPACE2);
-	EEPROM_readAnything(GPRS_HOST,gprsHost);Serial.println(gprsHost);
+ 	if(w)EEPROM_writeAnything(GPRS_HOST,udpHost);
+	Serial.print(udpHost);Serial.print(SPACE2);
+	EEPROM_readAnything(GPRS_HOST,udpHost);Serial.println(udpHost);
 
 	Serial.print(GPRS_PORT);Serial.print(SPACE);
 	ninteger = 20332; /**** DEFAULT VALUE STORED IN EEPROM ****/
@@ -575,9 +575,9 @@ void loop()
 	EEPROM_readAnything(GPRS_PORT,ninteger);Serial.println(ninteger,DEC);
 
 	Serial.print(UDP_HEADER);Serial.print(SPACE);
- 	if(w)EEPROM_writeAnything(UDP_HEADER,gprsHeader);
-	Serial.print(gprsHeader);Serial.print(SPACE2);
-	EEPROM_readAnything(UDP_HEADER,gprsHeader);Serial.println(gprsHeader);
+ 	if(w)EEPROM_writeAnything(UDP_HEADER,udpHeader);
+	Serial.print(udpHeader);Serial.print(SPACE2);
+	EEPROM_readAnything(UDP_HEADER,udpHeader);Serial.println(udpHeader);
 
 	Serial.print("Finished ");
 	if(w)Serial.print("Writing ");
