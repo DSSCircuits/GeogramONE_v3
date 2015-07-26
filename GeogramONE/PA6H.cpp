@@ -101,7 +101,30 @@ uint8_t PA6H::getCoordinates(goCoord *lastKnown, int8_t _tZ)
 					if(currentPosition.signalLock) //if satellite was locked then update all data
 						{
 							currentPosition.updated = 0xFF;
-							*lastKnown = currentPosition;
+						//	*lastKnown = currentPosition;  //For some reason this code will not compile on Arduino 1.6.5 so we use below instead
+							strcpy(lastKnown->latitude,currentPosition.latitude);
+							strcpy(lastKnown->longitude,currentPosition.longitude);
+							lastKnown->ns = currentPosition.ns;
+							lastKnown->ew = currentPosition.ew;
+							lastKnown->hour = currentPosition.hour;
+							lastKnown->minute = currentPosition.minute;
+							lastKnown->second = currentPosition.second;
+							lastKnown->day = currentPosition.day;
+							lastKnown->month = currentPosition.month;
+							lastKnown->year = currentPosition.year;
+							lastKnown->positionFixInd = currentPosition.positionFixInd;
+							lastKnown->mode2 = currentPosition.mode2;
+							lastKnown->pdop = currentPosition.pdop;
+							lastKnown->hdop = currentPosition.hdop;
+							lastKnown->vdop = currentPosition.vdop;
+							lastKnown->speedKPH = currentPosition.speedKPH;
+							lastKnown->speedMPH = currentPosition.speedMPH;
+							lastKnown->course = currentPosition.course;
+							lastKnown->satellitesUsed = currentPosition.satellitesUsed;
+							lastKnown->altitudeM = currentPosition.altitudeM;
+							lastKnown->altitudeFt = currentPosition.altitudeFt;
+							lastKnown->signalLock = currentPosition.signalLock;
+							lastKnown->updated = currentPosition.updated;
 						}
 						else
 							lastKnown->signalLock = false; //do not update data with the exception of indicating there was no signal lock
