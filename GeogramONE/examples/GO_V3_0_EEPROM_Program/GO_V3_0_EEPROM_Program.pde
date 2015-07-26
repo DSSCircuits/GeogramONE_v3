@@ -108,7 +108,7 @@ void loop()
 	char http3[36] = ")&z=19"; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	char d4msg[16] = "Pin D4 Alert"; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	char d10msg[16] = "Pin D10 Alert"; /**** DEFAULT VALUE STORED IN EEPROM ****/
-	char imei[16] = " "; //15 digit number on GSM chip /**** DEFAULT VALUE STORED IN EEPROM ****/
+	char imei[16] = "*"; //15 digit number on GSM chip /**** DEFAULT VALUE STORED IN EEPROM ****/
 	char gprsApn[36] = "wholesale"; //SIM card specific APN.  wholesale is used on Platinumtel /**** DEFAULT VALUE STORED IN EEPROM ****/
 	char gprsHost[36] = "193.193.165.166"; //Server address for GPS-Trace Orange /**** DEFAULT VALUE STORED IN EEPROM ****/
 	char gprsHeader[16] = "#SD#"; /**** DEFAULT VALUE STORED IN EEPROM ****/

@@ -73,7 +73,7 @@ uint8_t udpPosition()
 				return 2;
 		}
 	}
-	if(EEPROM.read(IMEI) == ' ')
+	if(EEPROM.read(IMEI) == '*')
 	{
 		char imei[16];
 		sim900.getIMEI(imei);
