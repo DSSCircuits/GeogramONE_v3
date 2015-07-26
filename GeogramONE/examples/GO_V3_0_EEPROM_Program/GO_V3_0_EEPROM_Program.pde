@@ -333,13 +333,13 @@ void loop()
 	EEPROM_readAnything(LONGITUDE3,slong);Serial.println(slong,DEC);
 	
 	Serial.print(BREACHSPEED);Serial.print(SPACE);
-	abyte = 2; /**** DEFAULT VALUE STORED IN EEPROM ****/
+	abyte = 3; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(BREACHSPEED,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(BREACHSPEED,abyte);Serial.println(abyte,DEC);
 	
 	Serial.print(BREACHREPS);Serial.print(SPACE);
-	abyte = 0x0A; /**** DEFAULT VALUE STORED IN EEPROM ****/
+	abyte = 10; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	if(w)EEPROM_writeAnything(BREACHREPS,(uint8_t)abyte);
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(BREACHREPS,abyte);Serial.println(abyte,DEC);
