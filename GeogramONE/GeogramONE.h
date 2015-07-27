@@ -67,13 +67,11 @@
 #define D4MSG					249
 #define D10MSG					265
 #define HTTP1					281
-#define HTTP2					317
-#define HTTP3					353
-#define IMEI					389
-#define GPRS_APN				405
-#define GPRS_HOST				441
-#define GPRS_PORT				477
-#define UDP_HEADER				479
+#define IMEI					317
+#define GPRS_APN				333
+#define GPRS_HOST				369
+#define GPRS_PORT				405
+#define UDP_HEADER				407
 
 
 /**********************************/

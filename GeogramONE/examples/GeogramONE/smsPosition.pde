@@ -17,7 +17,6 @@ void smsPosition()  //send coordinates
 
 void geoSMS(uint8_t rssi)
 {
-//	printEEPROM(HTTP2);
 	GSM.print(lastValid.month,DEC);
 	GSM.print("/");
 	GSM.print(lastValid.day,DEC);
@@ -47,11 +46,9 @@ void geoSMS(uint8_t rssi)
 	GSM.print(lastValid.satellitesUsed,DEC);
 	GSM.print(",");
 	if(!charge)
-		GSM.print("BAT");
+		GSM.println("BAT");
 	else
-		GSM.print("CHG");
-//	printEEPROM(HTTP3);
-	GSM.println();
+		GSM.println("CHG");
 
 	printEEPROM(HTTP1);
 	if(lastValid.ns == 'S')
@@ -68,6 +65,4 @@ void geoSMS(uint8_t rssi)
 	GSM.print(lastValid.longitude[2]);
 	GSM.print("+");
 	GSM.println(lastValid.longitude + 3);
-
-
 }

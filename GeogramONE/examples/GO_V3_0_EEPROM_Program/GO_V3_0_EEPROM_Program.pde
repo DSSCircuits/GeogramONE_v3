@@ -70,13 +70,11 @@
 #define D4MSG					249
 #define D10MSG					265
 #define HTTP1					281
-#define HTTP2					317
-#define HTTP3					353
-#define IMEI					389
-#define GPRS_APN				405
-#define GPRS_HOST				441
-#define GPRS_PORT				477
-#define UDP_HEADER				479
+#define IMEI					317
+#define GPRS_APN				333
+#define GPRS_HOST				369
+#define GPRS_PORT				405
+#define UDP_HEADER				407
 
 #define SPACE					"        "
 #define SPACE2					"        "
@@ -104,8 +102,6 @@ void loop()
 	char geoIDMsg[16] = "GO FW_3.0b"; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	char maxSpeedMsg[16] = "Max Speed = "; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	char http1[36] = "http://maps.google.com/maps?q="; /**** DEFAULT VALUE STORED IN EEPROM ****/
-	char http2[36] = " ("; // originally was "+(" . Replaced + with space because of new google maps app  /**** DEFAULT VALUE STORED IN EEPROM ****/
-	char http3[36] = ")&z=19"; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	char d4msg[16] = "Pin D4 Alert"; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	char d10msg[16] = "Pin D10 Alert"; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	char imei[16] = "*"; //15 digit number on GSM chip /**** DEFAULT VALUE STORED IN EEPROM ****/
@@ -542,16 +538,6 @@ void loop()
 	if(w)EEPROM_writeAnything(HTTP1,http1);
 	Serial.print(http1);Serial.print(SPACE2);
 	EEPROM_readAnything(HTTP1,http1);Serial.println(http1);
-	
-	Serial.print(HTTP2);Serial.print(SPACE);
-	if(w)EEPROM_writeAnything(HTTP2,http2);
-	Serial.print(http2);Serial.print(SPACE2);
-	EEPROM_readAnything(HTTP2,http2);Serial.println(http2);
-	
-	Serial.print(HTTP3);Serial.print(SPACE);
-	if(w)EEPROM_writeAnything(HTTP3,http3);
-	Serial.print(http3);Serial.print(SPACE2);
-	EEPROM_readAnything(HTTP3,http3);Serial.println(http3);
 
 	Serial.print(IMEI);Serial.print(SPACE);
 	if(w)EEPROM_writeAnything(IMEI,imei);

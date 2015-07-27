@@ -129,7 +129,7 @@ void setEeprom()
 			writeEEPROM(ptr,eepAdd,4);
 			break;
 	/**** string length 35 characters...not including terminating null ****/
-		case HTTP1: case HTTP2: case HTTP3: case GPRS_APN: case GPRS_HOST:
+		case HTTP1: case GPRS_APN: case GPRS_HOST:
 			ptr = strtok_r(NULL,"*",&str); 
 			writeEEPROM(ptr,eepAdd,35);
 			break;
@@ -207,7 +207,7 @@ void getEeprom()
 			case PINCODE:
 			case SMSADDRESS: case MOTIONMSG: case BATTERYMSG: case FENCE1MSG: case FENCE2MSG: case FENCE3MSG: 
 			case SPEEDMSG: case MAXSPEEDMSG: case GEOGRAMONEID: case D4MSG: case D10MSG: case HTTP1: 
-			case HTTP2: case HTTP3: case GPRS_APN: case IMEI: case GPRS_HOST: case UDP_HEADER:
+			case GPRS_APN: case IMEI: case GPRS_HOST: case UDP_HEADER:
 				printEEPROM(eepAdd);
 				break;
 			default:
