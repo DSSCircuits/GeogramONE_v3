@@ -23,21 +23,7 @@ void MAX17043setAlertLevel(uint8_t batteryInterruptValue)   //saves as actual pe
 	configRegister[1] |= batteryInterruptValue; //set new battery level
 	I2c.write(FUELGAUGE,0x0C,configRegister,2);
 }
-/*
-void MAX17043configureBatteryAlert(uint8_t setAlert)
-{
-	if(!setAlert) //we don't want to use the low battery alert function
-	{
-		pinMode(FUELGAUGEPIN,INPUT);
-		digitalWrite(FUELGAUGEPIN,LOW);  //set pin to high impedance
-	}
-	if(setAlert) //we do want to use the low battery alert function
-	{
-		pinMode(FUELGAUGEPIN,INPUT);
-		digitalWrite(FUELGAUGEPIN,HIGH);
-	}
-}
-*/
+
 uint8_t MAX17043clearAlertFlag()
 {
 	uint8_t configRegister[2] = {0,0};

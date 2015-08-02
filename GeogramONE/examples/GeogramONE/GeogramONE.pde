@@ -294,7 +294,7 @@ void interruptSMS(volatile uint8_t *status, uint16_t eAddress)
 	sim900.gsmSleepMode(2);
 }
 
-bool startSMSSend(uint8_t ros) //28754
+bool startSMSSend(uint8_t ros)
 {
 	sim900.gsmSleepMode(0);
 	if(!goesWhere(smsData.smsNumber,ros))

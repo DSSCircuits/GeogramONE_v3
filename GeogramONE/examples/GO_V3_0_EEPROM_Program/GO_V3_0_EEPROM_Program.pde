@@ -92,7 +92,7 @@ void setup()
 void loop()
 {
 	char pincode[5] = "0000"; //pincode must be 4 digits   /**** DEFAULT VALUE STORED IN EEPROM ****/
-	char smsaddress[16] = ""; //smsaddress must be 38 characters or less   /**** DEFAULT VALUE STORED IN EEPROM ****/
+	char smsaddress[16] = ""; //smsaddress must be 15 characters or less   /**** DEFAULT VALUE STORED IN EEPROM ****/
 	char batteryMsg[16] = "Low Battery"; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	char motionMsg[16] = "Motion Detected"; /**** DEFAULT VALUE STORED IN EEPROM ****/
 	char fence1Msg[16] = "Fence 1 Breach"; /**** DEFAULT VALUE STORED IN EEPROM ****/
