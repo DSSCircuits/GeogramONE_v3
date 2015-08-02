@@ -167,14 +167,14 @@ void loop()
 	EEPROM_readAnything(RETURNADDCONFIG,abyte);Serial.println(abyte,DEC);
 
 	Serial.print(TIMEZONE);Serial.print(SPACE);
-	sbyte = -4; /**** DEFAULT VALUE STORED IN EEPROM ****/
-	if(w)EEPROM_writeAnything(TIMEZONE,(int8_t)sbyte);   //use -4 for EST
+	sbyte = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
+	if(w)EEPROM_writeAnything(TIMEZONE,(int8_t)sbyte);   //i.e. use -4 for EST
 	Serial.print(sbyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(TIMEZONE,sbyte);Serial.println(sbyte,DEC);
 	
 	Serial.print(ENGMETRIC);Serial.print(SPACE);
 	abyte = 0; /**** DEFAULT VALUE STORED IN EEPROM ****/
-	if(w)EEPROM_writeAnything(ENGMETRIC,(uint8_t)abyte);  // 0 - English (mph, ft, etc...), 1 = Metric (kph, m, etc...)
+	if(w)EEPROM_writeAnything(ENGMETRIC,(uint8_t)abyte);  // 0 - English (MPH, ft, etc...), 1 = Metric (KPH, m, etc...)
 	Serial.print(abyte,DEC);Serial.print(SPACE2);
 	EEPROM_readAnything(ENGMETRIC,abyte);Serial.println(abyte,DEC);
 
