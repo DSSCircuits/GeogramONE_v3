@@ -1,7 +1,6 @@
 void smsPosition()  //send coordinates
 {
 	sim900.gsmSleepMode(0);
-	uint16_t geoDataFormat;
 	uint8_t rssi = sim900.signalQuality();
 	if(rssi)
 	{

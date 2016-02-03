@@ -3,7 +3,7 @@ void sleepTimer()
 	uint32_t sleepTimeOn;
 	uint32_t sleepTimeOff;
 	uint8_t sleepTimeConfig;
-	static unsigned long onOffTimer;
+	static unsigned long onTimer;
 	static bool reloadTimer = true;
 	if(call) //do not go to sleep until all pending SMS's are serviced
 		return;
@@ -25,22 +25,31 @@ void sleepTimer()
 	}
 	if(reloadTimer)
 	{
-		onOffTimer = millis();
+		onTimer = millis();
 		reloadTimer = false;
 	}
-	if((millis() - onOffTimer) < (sleepTimeOn))
+	if((millis() - onTimer) < (sleepTimeOn))
 		return;
+	onTimer += ((sleepTimeOff * 1000)+ sleepTimeOn);
 	if(turnGpsOff)
+	{
 		gps.sleepGPS();
+		sleepTimeOff -= 1;
+	}
 	if(turnGsmOff)
+	{
 		sim900.powerDownGSM();
+		sleepTimeOff -= 2;
+	}
 	sleepForSeconds(sleepTimeOff, wakeOnMotion, wakeOnCharger, false);
+	wakeUpTime = millis();
+	smsJustWokeUp = true;
+	udpJustWokeUp = true;
 	if(turnGpsOff)
 		gps.wakeUpGPS();
 	if(turnGsmOff)
 		sim900.initializeGSM();
 	gsmPowerStatus = true;	
-	reloadTimer = true;	
 }
 
 void sleepForSeconds(uint32_t delaySeconds, bool wakeOnMotion, bool wakeOnCharger, bool powerDown)

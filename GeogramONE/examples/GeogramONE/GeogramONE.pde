@@ -45,10 +45,13 @@ uint32_t udpInterval = 0;
 
 uint16_t speedLimit = 0;
 
+bool smsJustWokeUp = false;
+bool udpJustWokeUp = false;
 uint8_t smsPowerProfile = 0;
 uint8_t udpPowerProfile = 0;
 uint8_t smsPowerSpeed = 0;
 uint8_t udpPowerSpeed = 0;
+uint32_t wakeUpTime = 0;
 
 bool gsmPowerStatus = true;
 

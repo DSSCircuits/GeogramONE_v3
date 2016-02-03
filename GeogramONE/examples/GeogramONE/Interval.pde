@@ -1,6 +1,11 @@
 void smsTimerMenu()
 {
 	static unsigned long smsTimer = millis();
+	if((smsPowerProfile & 0x04) && smsJustWokeUp)
+	{
+		smsTimer = wakeUpTime;
+		smsJustWokeUp = false;
+	}
 	if((millis() - smsTimer) >= (smsInterval*1000))
 	{
 		bool speedExceeded = false;
@@ -27,6 +32,11 @@ void smsTimerMenu()
 void udpTimerMenu()
 {
 	static unsigned long udpTimer = millis();
+	if((udpPowerProfile & 0x04) && udpJustWokeUp)
+	{
+		udpTimer = wakeUpTime;
+		udpJustWokeUp = false;
+	}
 	if((millis() - udpTimer) >= (udpInterval*1000))
 	{
 		bool speedExceeded = false;
